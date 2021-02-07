@@ -71,7 +71,7 @@ const generateRange = (index, params, handleChange) => {
   el.max = params.max;
   el.step = params.step;
   el.value = params.value;
-  el.onchange = ev => handleChange(index, +ev.target.value);
+  el.oninput = ev => handleChange(index, +ev.target.value);
   return el;
 };
 
