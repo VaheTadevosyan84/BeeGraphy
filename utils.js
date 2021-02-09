@@ -1,4 +1,18 @@
 import makerjs from "makerjs";
+import * as sbp  from "svg-blueprint";
+
+const data = {};
+const blueprint = new sbp.Blueprint({
+  axisColor: "#002082",
+  axisOpacity: 0.9,
+  backgroundColor: "#ffffff",
+  stroke: "#111111",
+  gridColor: "#4A6DE5",
+  gridOpacity: 0.8,
+  parentSelector: "#model",
+  width: '100%',
+  height: '100%'
+});
 
 export const generateModel = (Model) => {
   const values = Model.metaParameters.map(param => {
@@ -17,8 +31,10 @@ export const generateModel = (Model) => {
   const generate = () => {
     const model = new Model(...values);
 
-    const svg = makerjs.exporter.toSVG(model);
-    document.getElementById("model").innerHTML = svg;
+    const path = makerjs.exporter.toSVGPathData(model, { origin: [0, 0] });
+    data.el && blueprint.remove(data.el);
+    data.el = blueprint.append('path', { d: path });
+    blueprint.fit();
   }
 
   const handleChange = (index, value) => {

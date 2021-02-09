@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "makerjs": "^0.17.0"
+    "makerjs": "^0.17.0",
+    "svg-blueprint": "^1.0.1"
   },
   "devDependencies": {
     "snowpack": "^3.0.11"
