@@ -1,5 +1,5 @@
 import {generateModel} from "./utils";
 
-import TextModel from "./src/test";
+import Model from "./src/WallShelves";
 
-generateModel(TextModel);
+generateModel(Model, 'WallShelves');

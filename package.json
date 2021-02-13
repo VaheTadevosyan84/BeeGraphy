@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "makerjs": "^0.17.0",
+    "seed-random": "^2.2.0",
     "svg-blueprint": "^1.0.1"
   },
   "devDependencies": {

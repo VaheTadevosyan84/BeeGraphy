@@ -119,6 +119,66 @@ export default function TextModel(
 TextModel.metaParameters = [
   {
     title: "թեստ",
+    type: "group",
+    parameters: [
+      { title: "false", type: "bool", value: false },
+      { title: "true", type: "bool", value: true },
+      { title: "select", type: "select", options: [
+          {value: "test1", label: "Test1"},
+          {value: "test2", label: "Test2"},
+          {value: "test3", label: "Test3"},
+        ], value: "test2" },
+      {
+        title: "rect_radius",
+        type: "range",
+        min: 5,
+        max: 20,
+        value: 10,
+      },
+      {
+        title: "թեստ",
+        type: "group",
+        parameters: [
+          { title: "false", type: "bool", value: false },
+          { title: "true", type: "bool", value: true },
+          { title: "select", type: "select", options: [
+              {value: "test1", label: "Test1"},
+              {value: "test2", label: "Test2"},
+              {value: "test3", label: "Test3"},
+            ], value: "test2" },
+          {
+            title: "rect_radius",
+            type: "range",
+            min: 5,
+            max: 20,
+            value: 10,
+          },
+          {
+            title: "թեստ",
+            type: "group",
+            parameters: [
+              { title: "false", type: "bool", value: false },
+              { title: "true", type: "bool", value: true },
+              { title: "select", type: "select", options: [
+                  {value: "test1", label: "Test1"},
+                  {value: "test2", label: "Test2"},
+                  {value: "test3", label: "Test3"},
+                ], value: "test2" },
+              {
+                title: "rect_radius",
+                type: "range",
+                min: 5,
+                max: 20,
+                value: 10,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "xz",
     type: "text",
     font: "ArTarumianHamagumar-Regular",
     value: "Ձեր Տեքստը Այստեղ",

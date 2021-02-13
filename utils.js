@@ -38,7 +38,7 @@ const getTitleFromParam = (param) => {
   return typeof param.title !== "string" ? param.title['en-US'] : param.title;
 };
 
-export const generateModel = (Model) => {
+export const generateModel = (Model, downloadableModelName = '') => {
   const values = (Model.metaParameters || []).map(param => getValueFromParam(param));
 
   const generate = () => {
@@ -58,14 +58,24 @@ export const generateModel = (Model) => {
     generate();
   };
 
+  const handleDownload = () => {
+    const a = document.createElement('a');
+    const model = new Model(...values);
+    const content = makerjs.exporter.toDXF(model);
+
+    a.href = `data:application/dxf;charset=utf-8,${content}`;
+    a.download = `${downloadableModelName} - ${Date.now()}.dxf`;
+    a.click();
+  };
+
   const paramsEl = document.getElementById("params");
   paramsEl.innerHTML = '';
-  generateParams(Model.metaParameters, paramsEl, handleChange);
+  generateParams(Model.metaParameters, paramsEl, handleChange, handleDownload, !!downloadableModelName);
   generate();
 };
 
 
-const generateParams = (params, paramsEl, handleChange) => {
+const generateParams = (params, paramsEl, handleChange, handleDownload, downloadable) => {
   params.forEach((param, index) => {
     const title = getTitleFromParam(param);
     const type = param.type;
@@ -95,6 +105,18 @@ const generateParams = (params, paramsEl, handleChange) => {
 
     paramsEl.appendChild(wrapper);
   });
+
+  if (downloadable) {
+    const wrapper = document.createElement("div");
+    const button = document.createElement("button");
+    button.onclick = handleDownload;
+    button.textContent = "Download";
+
+    wrapper.append(button);
+    wrapper.className = "wrapper";
+
+    paramsEl.appendChild(wrapper);
+  }
 };
 
 const generateByType = (index, type, params, handleChange) => {
