@@ -42,11 +42,10 @@ export const generateModel = (Model) => {
   const values = (Model.metaParameters || []).map(param => getValueFromParam(param));
 
   const generate = () => {
-    console.log(values);
     const model = new Model(...values);
 
     const path = makerjs.exporter.toSVGPathData(model, {origin: [0, 0]});
-    data.el && blueprint.remove(data.el);
+    data.el && blueprint.remove('path '   );
     data.el = blueprint.append('path', {d: path});
     blueprint.fit();
   }
