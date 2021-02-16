@@ -1,5 +1,5 @@
 import {generateModel} from "./utils";
 
-import Model from "./src/shelfModel";
+import Model from "./src/angleModel";
 
      generateModel(Model, 'WallShelves');

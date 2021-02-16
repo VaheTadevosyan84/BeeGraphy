@@ -24,6 +24,7 @@ export default function Model(hRCount, vRCount, w, l, h, thick) {
             const hole = new makerjs.models.Rectangle(thick, h / 2)
             makerjs.model.move(hole, [j * delta - thick / 2, 0])
             rectangle = makerjs.model.combineSubtraction(rectangle, hole)
+
         }
         makerjs.model.move(rectangle, [0, (l + 5) * i])
         this.models["rectangle" + i] = rectangle;
