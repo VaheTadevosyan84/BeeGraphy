@@ -100,8 +100,11 @@ myModels.metaParameters = [
         type:"range",
         value:4,
         min:1,
-        max:5,
+        max:8,
         step:1,
     }
 
 ]
+
+
+console.log(myModels.metaParameters)
