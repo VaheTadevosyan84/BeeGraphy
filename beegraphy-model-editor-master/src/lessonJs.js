@@ -13,71 +13,95 @@ function Models(bigR, smallR) {
 
 
     const circles  = {paths: {bigCircle,smallCircle}}
-    const henger = new makerjs.model.combineUnion(circles,rectangle)
+    const hanger = new makerjs.model.combineUnion(circles,rectangle)
 
 
     this.models = {
         rectangle,
-        henger
+        hanger
 
 
     }
-    this.paths = {
 
-
-    }
 }
 
 Models.metaParameters =[
     {
-        title:"bigR",
-        type:"range",
-        value:20,
-        min:0,
-        max:360,
-        step:1,
-    },
-    {
-        title:"smallR",
-        type:"range",
-        value:10,
-        min:0,
-        max:360,
-        step:1,
+
     },
 ];
-export default function myModels(bigR,smallR) {
-    const henger = new Models(bigR,smallR)
 
 
-    const rectangle = new makerjs.models.Rectangle(50, 100)
-    const cloneToColumn = new makerjs.layout.cloneToColumn(henger,4,20)
+export default function myModels(w, l, countH, bigR) {
+
+    const smallR = bigR / 2
+    const circlesDistance = (bigR + smallR) * 1.1
+    const hangerSize = bigR + smallR + circlesDistance
+    const margin = (l - countH * hangerSize)/ countH
+
+
+    console.log((l - countH * hangerSize)/ countH)
+
+
+    const hanger = new Models(bigR,smallR)
+
+
+    const rectangle = new makerjs.models.Rectangle(w, l)
+    const line = new makerjs.paths.Line([w / 2, 0],[w / 2, l])
+
+
+    const cloneToColumn = new makerjs.layout.cloneToColumn(hanger,countH,margin)
+    makerjs.model.move(cloneToColumn, [w / 4, margin])
+    const cloneMirror = new makerjs.layout.cloneToColumn(hanger,countH,margin)
+    makerjs.model.move(cloneMirror, [w - w / 4, margin])
+
 
 
     this.models = {
         rectangle,
-        henger,
-        cloneToColumn
+        cloneToColumn,
+        cloneMirror
+    };
+    this.paths = {
+        line,
     }
 
 
 }
 
-    myModels.metaParameters = [
-        {
-            title:"bigR",
-            type:"range",
-            value:20,
-            min:0,
-            max:360,
-            step:1,
-        },
-        {
-            title:"smallR",
-            type:"range",
-            value:10,
-            min:0,
-            max:360,
-            step:1,
-        },
-    ]
+myModels.metaParameters = [
+
+    {
+        title:"width",
+        type:"range",
+        value:100,
+        min:0,
+        max:360,
+        step:1,
+    },
+    {
+        title:"length",
+        type:"range",
+        value:200,
+        min:0,
+        max:360,
+        step:1,
+    },
+    {
+        title:"Hanger Count",
+        type:"range",
+        value:4,
+        min:1,
+        max:6,
+        step:1,
+    },
+    {
+        title:"Radius",
+        type:"range",
+        value:4,
+        min:1,
+        max:5,
+        step:1,
+    }
+
+]
