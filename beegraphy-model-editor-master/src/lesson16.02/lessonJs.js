@@ -24,22 +24,21 @@ function Models(bigR, smallR) {
 Models.metaParameters =[];
 
 
-export default function myModels(w, l, bigR) {
+export default function myModels(w, l, bigR, gap) {
 
     const smallR = bigR / 2
     const hanger = new Models(bigR,smallR)
     const modelExtends = makerjs.measure.modelExtents(hanger)
     const modelSize = modelExtends.height
-    const gap = modelExtends.height
-    const countH = (l - (modelSize + gap / 2)) / (modelSize + gap)
+    const countH = (l - (modelSize + gap)) / (modelSize + gap)
 
     const rectangle = new makerjs.models.Rectangle(w, l)
     const line = new makerjs.paths.Line([w / 2, 0],[w / 2, l])
 
     const cloneToColumn = new makerjs.layout.cloneToColumn(hanger,countH,gap)
-    makerjs.model.move(cloneToColumn, [w / 4, gap])
+    makerjs.model.move(cloneToColumn, [w / 4, gap + modelSize / 2 ])
     const cloneMirror = new makerjs.layout.cloneToColumn(hanger,countH,gap)
-    makerjs.model.move(cloneMirror, [w - w / 4, gap])
+    makerjs.model.move(cloneMirror, [w - w / 4, gap + modelSize / 2])
 
 
     this.models = {
@@ -56,6 +55,7 @@ export default function myModels(w, l, bigR) {
 myModels.metaParameters = [
     {title:"width", type:"range", value:100, min:25, max:360, step:1,},
     {title:"length", type:"range", value:200, min:25, max:360, step:1,},
-    {title:"Radius", type:"range", value:4, min:1, max:8, step:1,}
+    {title:"Radius", type:"range", value:4, min:1, max:6, step:1,},
+    {title:"Gap", type:"range", value:6, min:3, max:30, step:1,}
 ]
 
