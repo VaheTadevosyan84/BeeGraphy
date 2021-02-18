@@ -9,12 +9,8 @@ function Models(bigR, smallR) {
     const rectangle = new makerjs.models.Rectangle(2 * smallR, circlePosition)
     makerjs.model.move(rectangle,[ -smallR,-circlePosition])
 
-
-
-
     const circles  = {paths: {bigCircle,smallCircle}}
     const hanger = new makerjs.model.combineUnion(circles,rectangle)
-
 
     this.models = {
         rectangle,
@@ -36,11 +32,10 @@ export default function myModels(w, l, bigR) {
     const smallR = bigR / 2
     const hanger = new Models(bigR,smallR)
     const modelExtends = makerjs.measure.modelExtents(hanger)
-    const hangerSize = modelExtends.height
+    const modelSize = modelExtends.height
     const circlesDistance = (bigR + smallR) * 1.1
     const margin = circlesDistance + 5
-    const countH = (l - (hangerSize + margin)) / (hangerSize + margin)
-
+    const countH = (l - (modelSize + margin)) / (modelSize + margin)
 
     const rectangle = new makerjs.models.Rectangle(w, l)
     const line = new makerjs.paths.Line([w / 2, 0],[w / 2, l])
@@ -49,7 +44,6 @@ export default function myModels(w, l, bigR) {
     makerjs.model.move(cloneToColumn, [w / 4, margin])
     const cloneMirror = new makerjs.layout.cloneToColumn(hanger,countH,margin)
     makerjs.model.move(cloneMirror, [w - w / 4, margin])
-
 
 
     this.models = {
@@ -61,9 +55,7 @@ export default function myModels(w, l, bigR) {
         line,
     }
 
-
 }
-
 
 myModels.metaParameters = [
     {title:"width", type:"range", value:100, min:0, max:360, step:1,},
@@ -72,7 +64,6 @@ myModels.metaParameters = [
 ]
 
 myModels.metaParameters[1].max = myModels.metaParameters[0].max
-
 
 console.log(myModels.metaParameters)
 console.log(myModels.metaParameters[1].max);

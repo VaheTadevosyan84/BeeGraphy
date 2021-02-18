@@ -1,5 +1,5 @@
 import {generateModel} from "./utils";
 
-import Model from "./src/lessonJs";
+import Model from "./src/lesson16.02/lessonJs";
 
 generateModel(Model);
