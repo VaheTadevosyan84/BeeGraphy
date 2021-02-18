@@ -32,23 +32,18 @@ Models.metaParameters =[
 ];
 
 
-export default function myModels(w, l, countH, bigR) {
-
+export default function myModels(w, l, bigR) {
     const smallR = bigR / 2
-    const circlesDistance = (bigR + smallR) * 1.1
-    const hangerSize = bigR + smallR + circlesDistance
-    const margin = (l - countH * hangerSize)/ countH
-
-
-    console.log((l - countH * hangerSize)/ countH)
-
-
     const hanger = new Models(bigR,smallR)
+    const modelExtends = makerjs.measure.modelExtents(hanger)
+    const hangerSize = modelExtends.height
+    const circlesDistance = (bigR + smallR) * 1.1
+    const margin = circlesDistance + 5
+    const countH = (l - (hangerSize + margin)) / (hangerSize + margin)
 
 
     const rectangle = new makerjs.models.Rectangle(w, l)
     const line = new makerjs.paths.Line([w / 2, 0],[w / 2, l])
-
 
     const cloneToColumn = new makerjs.layout.cloneToColumn(hanger,countH,margin)
     makerjs.model.move(cloneToColumn, [w / 4, margin])
@@ -69,42 +64,15 @@ export default function myModels(w, l, countH, bigR) {
 
 }
 
+
 myModels.metaParameters = [
-
-    {
-        title:"width",
-        type:"range",
-        value:100,
-        min:0,
-        max:360,
-        step:1,
-    },
-    {
-        title:"length",
-        type:"range",
-        value:200,
-        min:0,
-        max:360,
-        step:1,
-    },
-    {
-        title:"Hanger Count",
-        type:"range",
-        value:4,
-        min:1,
-        max:6,
-        step:1,
-    },
-    {
-        title:"Radius",
-        type:"range",
-        value:4,
-        min:1,
-        max:8,
-        step:1,
-    }
-
+    {title:"width", type:"range", value:100, min:0, max:360, step:1,},
+    {title:"length", type:"range", value:200, min:0, max:0, step:1,},
+    {title:"Radius", type:"range", value:4, min:1, max:8, step:1,}
 ]
+
+myModels.metaParameters[1].max = myModels.metaParameters[0].max
 
 
 console.log(myModels.metaParameters)
+console.log(myModels.metaParameters[1].max);
