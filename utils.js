@@ -14,6 +14,13 @@ const blueprint = new sbp.Blueprint({
   height: '100%'
 });
 
+function b64EncodeUnicode(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+    function toSolidBytes(match, p1) {
+      return String.fromCharCode('0x' + p1);
+    }));
+}
+
 const getValueFromParam = param => {
   if (param.type === "text") {
     return {
@@ -44,9 +51,17 @@ export const generateModel = (Model, downloadableModelName = '') => {
   const generate = () => {
     const model = new Model(...values);
 
-    const path = makerjs.exporter.toSVGPathData(model, {origin: [0, 0]});
-    data.el && blueprint.remove('path '   );
-    data.el = blueprint.append('path', {d: path});
+    const svg = makerjs.exporter.toSVG(model, {origin: [0, 0]});
+    const div = document.createElement("div");
+    div.innerHTML = svg;
+    const svgGroup = div.querySelector("#svgGroup");
+    blueprint.elements.bbox.innerHTML = '';
+
+    [...svgGroup.childNodes].forEach(childNode => {
+      childNode.removeAttribute("vector-effect");
+      blueprint.elements.bbox.appendChild(childNode);
+    });
+
     blueprint.fit();
   }
 
@@ -61,9 +76,9 @@ export const generateModel = (Model, downloadableModelName = '') => {
   const handleDownload = () => {
     const a = document.createElement('a');
     const model = new Model(...values);
-    const content = makerjs.exporter.toDXF(model);
+    const content = b64EncodeUnicode(makerjs.exporter.toDXF(model));
 
-    a.href = `data:application/dxf;charset=utf-8,${content}`;
+    a.href = `data:application/dxf;charset=utf-8;base64,${content}`;
     a.download = `${downloadableModelName} - ${Date.now()}.dxf`;
     a.click();
   };
