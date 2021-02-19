@@ -37,6 +37,7 @@ export default function Model(width,radius) {
     const line3 = new makerjs.paths.Line(l3Start,l3End)
     const line4 = new makerjs.paths.Line(l4Start,l4End)
 
+
     this.paths = {
         circle1,
         circle2,
@@ -47,6 +48,7 @@ export default function Model(width,radius) {
         line3,
         line4
     };
+
 
     this.models = {
         figure,

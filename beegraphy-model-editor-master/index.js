@@ -1,5 +1,5 @@
 import {generateModel} from "./utils";
 
-import Model from "./src/lesson18.02/lesson2";
+import Model from "./src/lesson19.02/lesson1";
 
 generateModel(Model);
