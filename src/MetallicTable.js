@@ -152,7 +152,7 @@ function MetallicTable(dimensions) {
 
   const {width, length, height} = dimensions;
 
-  // this.models.face = new MetallicTableFace(width, length);
+  this.models.face = new MetallicTableFace(width, length);
 
   this.models.leg = new MetallicTableLeg(width / 2, length / 2, height, 50, 2, 0.25);
 }
@@ -162,7 +162,7 @@ MetallicTable.metaParameters = [
     type: "group", title: "Dimensions",
     parameters: [
       {key: "width", title: "Width", type: "range", value: 896, min: 600, max: 2000},
-      {key: "length", title: "Length", type: "range", value: 700, min: 300, max: 1400},
+      {key: "length", title: "Length", type: "range", value: 496, min: 300, max: 1400},
       {key: "height", title: "Height", type: "range", value: 500, min: 100, max: 1400},
     ],
   }
