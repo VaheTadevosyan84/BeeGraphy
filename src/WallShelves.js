@@ -6,7 +6,7 @@ const goldenRatio = 1.61803398875;
 const {Rectangle} = makerjs.models;
 const {move, combineSubtraction} = makerjs.model;
 
-export default function WallShelves(
+function WallShelves(
   main,
   dimension,
   material,
@@ -256,3 +256,4 @@ WallShelves.metaParameters = [
   },
 ];
 
+export default WallShelves;

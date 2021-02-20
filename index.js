@@ -1,5 +1,5 @@
 import {generateModel} from "./utils";
 
-import Model from "./src/WallShelves";
+import Model from "./src/MetallicTable";
 
-generateModel(Model, 'WallShelves');
+generateModel(Model, 'MetallicTable');
