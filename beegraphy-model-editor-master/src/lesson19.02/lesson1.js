@@ -1,4 +1,5 @@
 import makerjs from "makerjs";
+import {logger} from "snowpack";
 
 const { Rectangle } = makerjs.models;
 const { Line } = makerjs.paths;
@@ -14,71 +15,71 @@ function Hanger(boltDiameter) {
     makerjs.model.move(rectangle,[ -smallDiameter,0])
 
     const circles  = {paths: {bigCircle,smallCircle}}
-    const oneHanger = new makerjs.model.combineUnion(circles,rectangle)
-    const hanger = new makerjs.layout.cloneToColumn(oneHanger, 2, 24)
+    const hanger = new makerjs.model.combineUnion(circles,rectangle)
 
-    this.models = {
-        rectangle,
-        oneHanger,
-        hanger,
+    this.models = {hanger}
 
-
-
-    }
 
 }
 
+function CornerIntersection(leg) {
+    const { width, length, height, thickness, boundingRadius,boltDiameter, boltDistance} = leg;
+
+    const hanger = new Hanger(boltDiameter)
+    const mirrorHanger = new makerjs.model.clone(hanger)
+    makerjs.model.move(hanger, [0, 0])
+    makerjs.model.move(mirrorHanger, [0, 24])
+    const hangerHoles = new makerjs.model.combine(hanger,mirrorHanger)
+
+    this.models = {hangerHoles}
+
+}
 
 function MetallicLeg(leg) {
-    const { width, length, height, thickness, boundingRadius } = leg;
-    const sheetWidth = width + length - 2*thickness - 2*boundingRadius + Math.PI * boundingRadius / 2;
-    const delta = (width + length - sheetWidth) / 2;
+    const { width, length, height, thickness, boundingRadius,boltDiameter, boltDistance} = leg;
 
-    console.log(sheetWidth, height);
+    const sheetWidth = width + length - 2 * thickness - 2 * boundingRadius + Math.PI * boundingRadius / 2;
+    const delta = (width + length - sheetWidth) / 2;
 
     const sheet = new Rectangle(sheetWidth, height);
     move(sheet, [- (width - delta), 0]);
 
-    const midLine = new Line([0, 0], [0, height]);
-    midLine.layer = "blue";
+    const midLine = new Line([sheetWidth / 2, 0], [sheetWidth / 2, height]);
+    midLine.layer = "red";
 
-    // const hangers = new Hanger(boltDiameter)
-    // makerjs.model.move(hangers, [legWidth / 4, 8])
-    //
-    // const hangers2 = new Hanger(boltDiameter)
-    // const hangersHeight = makerjs.measure.modelExtents(hangers2).height
-    // makerjs.model.move(hangers2, [legWidth / 4, height - hangersHeight - 8])
-    //
-    // const newHangersSpace = height - 2 * hangersHeight - 16
+    const modelSize = makerjs.measure.modelExtents(new CornerIntersection(leg))
+    const cornerIntersectionBottom = new CornerIntersection(leg)
+    makerjs.model.move(cornerIntersectionBottom,[sheetWidth / 4, modelSize.low[1] + 8])
+    const cornerIntersectionTop = new CornerIntersection(leg)
+    makerjs.model.move(cornerIntersectionTop, [sheetWidth / 4, height - modelSize.high[1] - 8])
+    const cornerIntersection = new makerjs.model.combine(cornerIntersectionBottom,cornerIntersectionTop)
+    const cornerIntersectionMirror = new makerjs.model.mirror(cornerIntersection,true,false)
 
+    // const topPoint = makerjs.measure.modelExtents(cornerIntersectionTop).low
+    // const bottomPoint = makerjs.measure.modelExtents(cornerIntersectionBottom).high
+    // console.log(makerjs.measure.modelExtents(cornerIntersectionTop).low);
+    // console.log(bottomPoint);
 
-    this.models = { sheet };
+    this.models = { sheet, cornerIntersection, cornerIntersectionMirror};
     this.paths = { midLine };
+
+
+
 }
-
-    // for (let i = 0; i <= count; i++) {
-    //
-    // }
-
 
 export default function MetallicShelf(dimensions, leg, general, paddings, corner) {
 
     const {width, length, height} = dimensions;
-    const {count, boltDiameter, boltDistance, thickness} = general;
+    const {count, boltDiameter, boltDistance} = general;
     const {paddingTop, paddingBottom} = paddings;
     const {cornerWidth, cornerHeight} = corner;
 
-    const metallicCorner = new MetallicLeg({...leg, height})
+    const metallicLeg = new MetallicLeg({...leg, height})
 
 
 
-
-    this.models = {
-        metallicCorner,
-
-    };
-    this.paths = {
-    };
+    this.models = {metallicLeg,};
+    this.paths = {};
 }
 
 
@@ -98,15 +99,16 @@ MetallicShelf.metaParameters =[
             {key: "length", title: "Length", type: "range", value: 30, min: 15, max: 200},
             {key: "thickness", title: "Thickness", type: "range", value: 1.5, min: 0.5, max: 3, step: 0.1},
             {key: "boundingRadius", title: "Bounding radius", type: "range", value: 0.5, min: 0.2, max: 0.75, step: 0.05},
+            {key: "boltDiameter", title: "boltDiameter", type: "range", value: 3, min: 1, max: 5, step: 0.1},
+            {key: "boltDistance", title: "boltDistance", type: "range", value: 5, min: 1, max: 200, step: 0.1},
         ],
     },
     {
         type: "group", title: "General",
         parameters: [
-            {key: "count", title: "Count", type: "range", value: 10, min: 0, max: 200},
+            {key: "count", title: "Count", type: "range", value: 4, min: 0, max: 200},
             {key: "boltDiameter", title: "boltDiameter", type: "range", value: 3, min: 1, max: 200, step: 0.1},
             {key: "boltDistance", title: "boltDistance", type: "range", value: 5, min: 1, max: 200, step: 0.1},
-            {key: "thickness", title: "Thickness", type: "range", value: 10, min: 0, max: 200},
         ],
     },
     {
