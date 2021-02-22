@@ -1,5 +1,4 @@
 import makerjs from "makerjs";
-import {logger} from "snowpack";
 
 const { Rectangle } = makerjs.models;
 const { Line } = makerjs.paths;
@@ -57,12 +56,10 @@ function MetallicLeg(leg) {
 
     // const topPoint = makerjs.measure.modelExtents(cornerIntersectionTop).low
     // const bottomPoint = makerjs.measure.modelExtents(cornerIntersectionBottom).high
-    // console.log(makerjs.measure.modelExtents(cornerIntersectionTop).low);
-    // console.log(bottomPoint);
+
 
     this.models = { sheet, cornerIntersection, cornerIntersectionMirror};
     this.paths = { midLine };
-
 
 
 }
@@ -70,7 +67,7 @@ function MetallicLeg(leg) {
 export default function MetallicShelf(dimensions, leg, general, paddings, corner) {
 
     const {width, length, height} = dimensions;
-    const {count, boltDiameter, boltDistance} = general;
+    const {count} = general;
     const {paddingTop, paddingBottom} = paddings;
     const {cornerWidth, cornerHeight} = corner;
 
@@ -107,8 +104,7 @@ MetallicShelf.metaParameters =[
         type: "group", title: "General",
         parameters: [
             {key: "count", title: "Count", type: "range", value: 4, min: 0, max: 200},
-            {key: "boltDiameter", title: "boltDiameter", type: "range", value: 3, min: 1, max: 200, step: 0.1},
-            {key: "boltDistance", title: "boltDistance", type: "range", value: 5, min: 1, max: 200, step: 0.1},
+
         ],
     },
     {
