@@ -37,6 +37,10 @@ export default function Model(width,radius) {
     const line3 = new makerjs.paths.Line(l3Start,l3End)
     const line4 = new makerjs.paths.Line(l4Start,l4End)
 
+    line1.layer = "blue"
+    line2.layer = "blue"
+    line3.layer = "blue"
+    line4.layer = "blue"
 
     this.paths = {
         circle1,
