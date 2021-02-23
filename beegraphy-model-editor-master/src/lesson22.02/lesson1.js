@@ -7,7 +7,7 @@ const{combineUnion} = makerjs.model
 function Ring(radius, t){
 
     const mainCircle = new Circle([0,0],radius)
-    const lockPlace = new Circle([radius - t, 0],0.7)
+    const lockPlace = new Circle([radius - 1.5 * t, 0],t)
 
 
     this.paths = {mainCircle,lockPlace}
@@ -18,7 +18,7 @@ function UnionRings(radius,t) {
     const secondRing = new makerjs.model.clone(ring)
     makerjs.model.move(ring,[radius + t, 0 ])
     const unionModel = new combineUnion(secondRing, ring)
-    const lockPlace = new Circle([radius - t, 0],0.7)
+    const lockPlace = new Circle([radius - 1.5 * t, 0],t)
     const lock = {paths:{lockPlace}}
     const model = new makerjs.model.combine(unionModel,lock)
     const lock2 = {paths:{lockPlace}}
@@ -53,18 +53,17 @@ export default function BraceletModel(general) {
     this.models = {};
     this.paths = {};
 
-    const models = [];
+    const models = [startRing,rings];
 
 
     for (let i = 1; i <= width / length; i++) {
         const doubleRings = new DoubleRings(radius, t)
         makerjs.model.move(doubleRings,[(radius + radius /5.5) * i,0])
-        if (i === 1) models.push(startRing);
-        models.push(doubleRings)
+        models.splice(i, 0, doubleRings)
     }
     const bracelet = models.reduce((acc, model) => combineUnion(acc, model), models[0]);
     this.models.bracelet = bracelet;
-
+    console.log(models)
 
 }
 
