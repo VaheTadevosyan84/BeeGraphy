@@ -1,11 +1,12 @@
 import makerjs from "makerjs"
 
 const {BezierCurve, Rectangle} = makerjs.models;
-const {move, combineUnion} = makerjs.model;
+const {move, combineUnion,clone,mirror} = makerjs.model;
 const {cloneToRow, childrenOnChain} = makerjs.layout;
 const {Arc, Line} = makerjs.paths;
 const {fillet} = makerjs.path;
 const {Holes, ConnectTheDots} = makerjs.models;
+
 
 function Leaf(width, height, padding = 0) {
     const round = height * 0.5;
@@ -61,42 +62,52 @@ function Box(side,height) {
 
 }
 
+// function CombineUnion(...model) {
+//
+//     const models = [...model]
+//     const unionParts = models.reduce((acc, model) => combineUnion(acc, model), models[0]);
+//     return unionParts
+//
+// }
 function InnerBox(side, height) {
 
-    const firstPart = new Rectangle(side,side * 3)
+    const basePart = new Rectangle(side,side)
+    const leftSide = new Rectangle(height,side)
+    move(leftSide,[-height,0])
+
+    const rightSide = clone(leftSide)
+    move(rightSide,[side,0])
+    const topSide = new Rectangle(side, height)
+    move(topSide,[0,side])
+    const bottomSide = clone(topSide)
+    move(bottomSide,[0,-height])
+    const unionPart1 = combineUnion(combineUnion(combineUnion(combineUnion(basePart,leftSide),rightSide),topSide),bottomSide);
+
     const closingPart = new ClosingPart(side, height)
-    makerjs.model.rotate(closingPart,180)
-    move(closingPart,[0,height])
-    const closingPartMirror = makerjs.model.mirror(closingPart,true,false)
-    move(closingPartMirror,[side,height])
-    const combineParts = makerjs.model.combine(closingPart,closingPartMirror)
-    const combinePartsMirror = makerjs.model.mirror(combineParts,false, true)
-    move(combinePartsMirror, [0, side * 3])
-    const unionParts = combineUnion(combineParts,firstPart)
-    const secondPart = new Rectangle(side * 3, side)
-    move(secondPart,[-side,side])
-    const boxPart = combineUnion(combinePartsMirror, unionParts)
+    move(closingPart,[side,side])
+    const closingPartMirror = mirror(closingPart,true,false)
+    move(closingPartMirror,[0,side])
+    const bottomClosingPart = mirror(closingPart,false,true)
+    move(bottomClosingPart,[side,0])
+    const bottomClosingPartMirror = mirror(closingPart,true,true)
+    move(bottomClosingPartMirror,[0,0])
 
-    const innerBox = combineUnion(boxPart,secondPart)
-    move(innerBox,[side * 1.5,side * 2])
+    const unionParts = combineUnion(combineUnion(combineUnion(combineUnion(unionPart1,closingPart),closingPartMirror),bottomClosingPart),bottomClosingPartMirror)
+    move(unionParts,[side * 1.5, height * 3])
 
-    this.models = {innerBox}
-
-
+    this.models = {unionParts}
 }
-
-
-
 function PaperBox(side, height) {
     const outerBox = new OuterBox(side, height)
     const box = new Box(side,height)
     const paperBox = combineUnion(outerBox,box)
+
     const innerBox = new InnerBox(side, height)
 
-    this.models = {paperBox, innerBox}
+    this.models = {innerBox,paperBox}
 }
 PaperBox.metaParameters = [
-    {type: "range", title: "Width", min: 10, max: 500, value: 50},
-    {type: "range", title: "Height", min: 10, max: 500, value: 50},
+    {type: "range", title: "Width", min: 10, max: 500, value: 50, step:1,},
+    {type: "range", title: "Height", min: 10, max: 500, value: 50, step: 1},
 ];
 export default PaperBox;
