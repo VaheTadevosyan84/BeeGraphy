@@ -18,10 +18,12 @@ function BaseModel(width, height, angle, bigArc,hole,pointX) {
     const point7 = [width / 2 - smallArc,smallSide];
     const point8 = [width / 2 + smallArc,smallSide];
 
+
     const line1 = new Line(point1,point2);
     const line2 = new Line(point3,point4);
     const line3 = new Line(point5,point7);
     const line4 = new Line(point6,point8);
+
     const topArc = new Arc(point1,point3,bigArc,false,true);
     const bottomArc = new Arc(point2,point4,bigArc,false,true);
     const arcSmall = new Arc(point7,point8,smallArc,false,true);
