@@ -34,16 +34,25 @@ function BaseModel(width, height, angle, bigArc,hole,pointX) {
 function SidePart(width, height, angle,bigArc,pointX) {
     const point1 = [0, height];
     const point2 = [pointX, 0];
-    const point3 = [width / 4, height];
+    const point3 = [width / 4, height * 2];
     const point4 = [width / 4, 0];
+    const point5 = [width, height];
+    const point6 = [width, 0];
+
 
     const line1 = new Line(point1,point2)
     const line2 = new Line(point3,point4)
-    const arcTop = new Arc(point1,point3,bigArc,false,true)
-    const arcBottom = new Arc(point2,point4,bigArc,false,true)
+    const arcTop = new Arc(point1,point5,bigArc,false,true)
+    const arcBottom = new Arc(point2,point6,bigArc,false,true)
 
-    this.models = {};
-    this.paths = {line1,line2,arcTop,arcBottom};
+    const lineModels = {paths:{line1,line2}}
+    const arcBottomModel = {paths:{arcBottom}}
+    const arcTopModel = { paths:{arcTop}}
+    const cut = makerjs.model.combine(arcBottomModel,lineModels,true,false)
+    const combine = makerjs.model.combine(cut,arcTopModel,true,false,true)
+
+    this.models = {combine};
+    this.paths = {};
 }
 
 function HangerModel(width, height, angle,bigArc,hole) {
@@ -60,7 +69,7 @@ function HangerModel(width, height, angle,bigArc,hole) {
     move(sidePart,[sidePartPointX,0])
     const sidePartMirror = mirror(sidePart,true,false)
     move(sidePartMirror,[width - sidePartPointX,0])
-    this.models = {sidePart,sidePartMirror,baseModel}
+    this.models = {sidePart,sidePartMirror, baseModel}
 }
 HangerModel.metaParameters = [
     {type: "range", title: "Width", min: 20, max: 100, value: 40, step: 1},
