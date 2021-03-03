@@ -62,10 +62,8 @@ function Box(side,height) {
 
 }
 
-// function CombineUnion(...model) {
-//
-//     const models = [...model]
-//     const unionParts = models.reduce((acc, model) => combineUnion(acc, model), models[0]);
+// function CombineUnion(start,...model) {
+//     const unionParts = model.reduce((acc, model) => combineUnion(acc, model), model[0]);
 //     return unionParts
 //
 // }
@@ -92,8 +90,11 @@ function InnerBox(side, height) {
     const bottomClosingPartMirror = mirror(closingPart,true,true)
     move(bottomClosingPartMirror,[0,0])
 
+
     const unionParts = combineUnion(combineUnion(combineUnion(combineUnion(unionPart1,closingPart),closingPartMirror),bottomClosingPart),bottomClosingPartMirror)
     move(unionParts,[side * 1.5, height * 3])
+
+
 
     this.models = {unionParts}
 }
