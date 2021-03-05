@@ -41,7 +41,7 @@ function HandleModel(radius,padding,width) {
 
 function BagPart(radius,padding,width,cutPart) {
     const smallPadding = 4
-    const smallRadius = 7
+    const smallRadius = 3.5
     const circle1 = new Circle([0,0],radius)
     const circle2 = new Circle([0,0],radius - padding)
 
@@ -52,7 +52,8 @@ function BagPart(radius,padding,width,cutPart) {
     const circleModel2 = {paths:{circle2}}
     const lineModel1 = {paths:{line1}}
     const lineModel2 = {paths:{line2}}
-
+    const test = makerjs.path.intersection(circle2,line2)
+    console.log(test);
     const cut1 = combine(circleModel1,lineModel1,false,true,true,false)
     const cut2 = combine(circleModel2,lineModel2,false,true,true,false)
 
